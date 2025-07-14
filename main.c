@@ -7,6 +7,7 @@
 
 int main(int argc, char* agrv[])
 {
+    Table* table = new_table();
     InputBuffer *input_buffer = new_input_buffer();
 
     while(true)
@@ -16,7 +17,7 @@ int main(int argc, char* agrv[])
 
         if (input_buffer->buffer[0] == '.')
         {
-            switch(do_meta_command(input_buffer))
+            switch(do_meta_command(input_buffer, table))
             {
                 case (META_COMMAND_SUCCESS):
                     continue;
@@ -34,9 +35,21 @@ int main(int argc, char* agrv[])
             case(PREPARE_UNRECOGNIZED_STATEMENT):
                 printf("Unrecognized keybord on the start of %s.\n", input_buffer->buffer);
                 continue;
+            case (PREPARE_SYNTAX_ERROR):
+                printf("Syntax error. Could not parse statement %s.\n", input_buffer->buffer);
+                continue;
         }
-
-        execute_statement(&statement);
-        printf("Executed.\n");
+        switch (execute_statement(&statement, table))
+        {
+        case (EXECUTE_SUCCESS):
+            printf("Executed.\n");
+            break;
+        case (EXECUTE_TABLE_FULL):
+            printf("Error: Table full.\n");
+            break;
+        default:
+            printf("Error: Unrecognized statement.\n");
+            break;
+        }
     }
 }
