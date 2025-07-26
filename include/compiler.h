@@ -1,34 +1,14 @@
 #ifndef COMPILER_H
 #define COMPILER_H
-#include "../include/REPL.h"
 #include <stdint.h>
+#include "../include/REPL.h"
+#include "../constants/error.h"
 
 #define COLUMN_USERNAME_SIZE 32
 #define COLUMN_EMAIL_SIZE 255
 #define size_of_attribute(Struct, Attribute) sizeof(((Struct*)0)->Attribute)
 #define TABLE_MAX_PAGES 100
 
-typedef enum {
-    META_COMMAND_SUCCESS,
-    META_COMMAND_UNRECOGNIZED_COMMAND
-} MetaCommandResult;
-
-typedef enum { 
-    PREPARE_SUCCESS,
-    PREPARE_UNRECOGNIZED_STATEMENT,
-    PREPARE_SYNTAX_ERROR,
-} PrepareResult;
-
-typedef enum {
-    STATEMENT_INSERT,
-    STATEMENT_SELECT,
-} StatementType;
-
-typedef enum {
-    EXECUTE_SUCCESS,
-    EXECUTE_TABLE_FULL,
-    EXECUTE_UNRECOGNIZED_STATEMENT,
-} ExecuteResult;
 
 typedef struct {
     uint32_t id;

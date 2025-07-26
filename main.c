@@ -4,6 +4,8 @@
 #include <string.h>
 #include "./include/REPL.h"
 #include "./include/compiler.h"
+#include "./constants/error.h"
+#include "./constants/error.c"
 
 int main(int argc, char* agrv[])
 {
@@ -22,7 +24,7 @@ int main(int argc, char* agrv[])
                 case (META_COMMAND_SUCCESS):
                     continue;
                 case (META_COMMAND_UNRECOGNIZED_COMMAND):
-                    printf("Unrecognized command %s\n", input_buffer->buffer);
+                    printf(Err_Meta_Command_Unrecognized.err_message, input_buffer->buffer);
                     continue;
             }
         }
@@ -33,10 +35,10 @@ int main(int argc, char* agrv[])
             case (PREPARE_SUCCESS):
                 break;
             case(PREPARE_UNRECOGNIZED_STATEMENT):
-                printf("Unrecognized keybord on the start of %s.\n", input_buffer->buffer);
+                printf(Err_Prepare_Unrecognized_Statement.err_message, input_buffer->buffer);
                 continue;
             case (PREPARE_SYNTAX_ERROR):
-                printf("Syntax error. Could not parse statement %s.\n", input_buffer->buffer);
+                printf(Err_Prepare_Syntax_Error.err_message, input_buffer->buffer);
                 continue;
         }
         switch (execute_statement(&statement, table))
@@ -45,10 +47,10 @@ int main(int argc, char* agrv[])
             printf("Executed.\n");
             break;
         case (EXECUTE_TABLE_FULL):
-            printf("Error: Table full.\n");
+            printf("%s\n", Err_Execute_Table_Full.err_message);
             break;
         default:
-            printf("Error: Unrecognized statement.\n");
+            printf("%s\n", Err_Execute_Unrecognized_Statement.err_message);
             break;
         }
     }
